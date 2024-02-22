@@ -1,0 +1,150 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: yes
+
+  tasks:
+    - name: cloud-init                 | Create dirs
+      file: path={{ item }} state=directory owner=ssm group=ssm
+      with_items:
+        - /opt/prometheus/data
+        - /opt/consul-data
+        - /srv/collect_info
+
+    - name: NGINX                      | Disable daemon
+      lineinfile:
+        dest: /etc/nginx/nginx.conf
+        line: 'daemon off;'
+
+    - name: NGINX                      | Disable password-page
+      replace:
+        dest: /etc/nginx/conf.d/ssm.conf
+        regexp: 'setup_type ovf-ami'
+        replace: 'setup_type docker'
+
+    - name: SSM                        | Fix nginx config
+      replace:
+        dest: /etc/nginx/nginx.conf
+        regexp: '^(\s*)listen'
+        replace: '\1#listen'
+
+    # https://github.com/geerlingguy/drupal-vm/issues/1497
+    # https://docs.docker.com/engine/userguide/storagedriver/overlayfs-driver/#limitations-on-overlayfs-compatibility
+    - name: SSM                        | Run workaround for overlayfs
+      command: find /var/lib/mysql -type f -exec touch {} \;
+
+    - name: Grafana                    | Enable gzip
+      community.general.ini_file:
+        path: /etc/grafana/grafana.ini
+        section: server
+        option: enable_gzip
+        value: true
+
+    - name: MariaDB                    | Create /var/lib/mysql-files
+      ansible.builtin.file:
+        path: /var/lib/mysql-files
+        state: directory
+        owner: mysql
+        group: mysql
+        mode: '0440'
+
+    - name: MariaDB                    | Prepare MariaDB
+      shell: rm -f /etc/my.cnf.d/auth_gssapi.cnf && /usr/bin/mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+
+    - name: MariaDB                    | Add includedir dir
+      ansible.builtin.lineinfile:
+        dest: /etc/my.cnf
+        line: '!includedir /var/lib/mysql'
+
+    - name: MariaDB                    | Copy page.cnf
+      ansible.builtin.copy:
+        src: /etc/my.cnf.d/page.cnf
+        dest: /var/lib/mysql/page.cnf
+        owner: mysql
+        group: mysql
+        mode: '0440'
+
+    - name: MariaDB                    | Remove page.cnf
+      ansible.builtin.file:
+        path: /etc/my.cnf.d/page.cnf
+        state: absent
+
+    - name: SSM                        | Start services
+      shell: ON_SSM_SERVER_SETUP=1 supervisord -c /etc/supervisord.conf &
+
+    - name: SSM                        | Wait for mysqld start
+      wait_for:
+        port: 3306
+        state: present
+        delay: 30
+        timeout: 60
+
+    - name: qan-api                    | Import MySQL database
+      community.mysql.mysql_db:
+        login_unix_socket: /var/lib/mysql/mysql.sock
+        name: ssm
+        state: import
+        target: /usr/share/ssm-qan-api/schema/ssm.sql
+
+    - name: qan-api                    | Create MySQL user for Grafana
+      community.mysql.mysql_user:
+        login_unix_socket: /var/lib/mysql/mysql.sock
+        name: grafana
+        host: localhost
+        password: '*58324E2D77A9BBFD9DD1E904649697615FE74649'
+        priv: 'ssm.*:SELECT'
+        encrypted: yes
+        state: present
+
+    - name: SSM                        | Wait for dashboards
+      wait_for:
+        path: /var/lib/grafana/PERCONA_DASHBOARDS_VERSION
+        state: present
+
+    - name: SSM                        | Create ssm-update dirs
+      file: path={{ item }} state=directory
+      with_items:
+        - /srv/update
+
+    - name: SSM                        | Stop services
+      shell: supervisorctl shutdown
+
+    - name: SSM                    | Remove Python Modules
+      pip:
+        name:
+          - PyMySQL
+        executable: pip3
+        state: absent
+
+    - name: SSM                        | Remove OS tools
+      shell: microdnf -y remove python3-pip yum-utils
+
+    - name: SSM                        | Cleanup yum cache
+      shell: microdnf clean all
+
+    - name: SSM                        | Cleanup logs
+      file: path={{ item }} state=absent
+      with_items:
+        - /var/log/consul.log
+        - /var/log/createdb.log
+        - /var/log/cron.log
+        - /var/log/dashboard-upgrade.log
+        - /var/log/mysql.log
+        - /var/log/nginx.log
+        - /var/log/node_exporter.log
+        - /var/log/prometheus.log
+        - /var/log/qan-api.log
+        - /var/log/yum.log
+        - /var/log/grafana/grafana.log
+        - /var/log/supervisor/supervisord.log
+        - /var/log/ssm-manage.log
+        - /opt/consul-data/*
+        - /opt/prometheus/data
+        - /opt/consul-data
+        - /tmp/RPMS
+
+    - name: cloud-init                 | Create dirs
+      file: path={{ item }} state=directory owner=ssm group=ssm
+      with_items:
+        - /opt/prometheus/data
+        - /opt/consul-data
