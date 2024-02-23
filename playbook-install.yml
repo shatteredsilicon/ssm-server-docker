@@ -80,39 +80,28 @@
         home: /var/lib/grafana
         shell: /sbin/nologin
 
-    - name: SSM                        | Add local YUM repository
-      when: ansible_os_family == 'RedHat'
-      copy:
-        dest: /etc/yum.repos.d/local.repo
-        content: |
-          [local]
-          name=Local repo
-          baseurl=file:///tmp/RPMS
-          gpgcheck=0
-          enabled=0
-
     - name: SSM                        | Install RPMs
       when: ansible_os_family == 'RedHat'
-      shell: microdnf -y --enablerepo local --enablerepo ssm install --nodocs --noplugins --best {{ item }}
+      shell: microdnf -y --enablerepo ssm install --nodocs --noplugins --best {{ item }}
       with_items:
         - nginx
         - consul
         - grafana
         - prometheus
-        - ssm-qan-api
-        - ssm-qan-app
-        - percona-toolkit-ssm-minimal
-        - ssm-dashboards
-        - ssm-server
-        - ssm-client
-        - ssm-manage
-        - ssm-managed
-        - rds_exporter
-        - snmp_exporter
+        - ssm-qan-api-9.4.1
+        - ssm-qan-app-9.4.1
+        - percona-toolkit-ssm-minimal-9.4.1
+        - ssm-dashboards-9.4.1
+        - ssm-server-9.4.1
+        - ssm-client-9.4.1
+        - ssm-manage-9.4.1
+        - ssm-managed-9.4.1
+        - rds_exporter-9.4.1
+        - snmp_exporter-9.4.1
 
     - name: SSM                        | Install MariaDB 10.4
       when: ansible_os_family == 'RedHat'
-      shell: microdnf -y --enablerepo local --enablerepo ssm install --nodocs --noplugins --best MariaDB-server MariaDB-client
+      shell: microdnf -y --enablerepo ssm install --nodocs --noplugins --best MariaDB-server MariaDB-client
 
     - name: NGINX SSL Certificate      | Add script
       copy:
