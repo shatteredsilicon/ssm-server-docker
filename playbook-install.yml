@@ -90,7 +90,7 @@
         - prometheus
         - ssm-qan-api-9.4.1
         - ssm-qan-app-9.4.1
-        - percona-toolkit-ssm-minimal-9.4.1
+        - percona-toolkit-ssm-minimal
         - ssm-dashboards-9.4.1
         - ssm-server-9.4.1
         - ssm-client-9.4.1

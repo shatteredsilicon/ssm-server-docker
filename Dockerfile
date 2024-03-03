@@ -11,9 +11,6 @@ RUN microdnf -y update && \
 RUN useradd -s /bin/false ssm
 RUN (rkhunter --update || true) && rkhunter --propupd
 
-ARG ssm_version=ssm_version
-ENV SSM_VERSION=$ssm_version
-
 COPY playbook-install.yml /opt/playbook-install.yml
 COPY playbook-init.yml /opt/playbook-init.yml
 
@@ -33,6 +30,9 @@ FROM scratch
 EXPOSE 80 443
 
 WORKDIR /opt
+
+ARG ssm_version=ssm_version
+ENV SSM_VERSION=$ssm_version
 
 COPY --from=builder / /
 
