@@ -5,7 +5,7 @@ RUN sed -i "/\[appstream\]/a exclude=mariadb*,galera*,boost-program-options" /et
 
 RUN microdnf -y update && \
     microdnf -y install epel-release && \
-    microdnf -y install --nodocs --noplugins --best shadow-utils rkhunter && \
+    microdnf -y install --nodocs --noplugins --best shadow-utils rkhunter file && \
     microdnf -y clean all
 
 RUN useradd -s /bin/false ssm
