@@ -13,7 +13,7 @@ build() {
 
     local image_id_file=${BUILDDIR}/ssm-server-image-id
     touch ${image_id_file}
-    DOCKER_BUILDKIT=1 docker build --build-arg ssm_version=${VERSION} --iidfile ${image_id_file} .
+    DOCKER_BUILDKIT=1 docker build --build-arg ssm_version=${VERSION} --build-arg env=${ENV} --build-arg ssm_repo_url=${SSM_REPO_URL} --build-arg ssm_repo_gpgkey=${SSM_REPO_GPGKEY} --iidfile ${image_id_file} .
     local image_id=$(cat ${image_id_file})
 
     local origin_image_tar=${BUILDDIR}/ssm-server-image.tar

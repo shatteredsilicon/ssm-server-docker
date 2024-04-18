@@ -3,6 +3,11 @@
   become: yes
   gather_facts: yes
 
+  vars:
+    ssm_package_suffix: "{% if ansible_env.ENV in ('prod', 'production') %}{% else %}.dev{% endif %}"
+    ssm_repo_url: "{% if ansible_env.SSM_REPO_URL != '' %} {{ ansible_env.SSM_REPO_URL }} {% elif ansible_env.ENV in ('prod', 'production') %} https://dl.shatteredsilicon.net/ssm/$releasever/RPMS/$basearch/ {% else %} https://dl.shatteredsilicon.net/ssm/$releasever/RPMS/$basearch/ {% endif %}"
+    ssm_repo_gpgkey: "{% if ansible_env.SSM_REPO_GPGKEY != '' %} {{ ansible_env.SSM_REPO_GPGKEY }} {% else %} https://dl.shatteredsilicon.net/ssm/$releasever/RPM-GPG-KEY-SSM-EL$releasever {% endif %}"
+
   tasks:
     - name: Packages                   | Add SSM repository
       when: ansible_os_family == 'RedHat'
@@ -11,8 +16,8 @@
         content: |
           [ssm]
           name=SSM repo
-          baseurl=https://dl.shatteredsilicon.net/ssm/$releasever/RPMS/$basearch/
-          gpgkey=https://dl.shatteredsilicon.net/ssm/$releasever/RPM-GPG-KEY-SSM-EL$releasever
+          baseurl={{ ssm_repo_url }}
+          gpgkey={{ ssm_repo_gpgkey }}
           gpgcheck=1
           enabled=0
 
@@ -87,21 +92,21 @@
         - nginx
         - consul
         - grafana
-        - prometheus
-        - ssm-qan-api-9.4.1
-        - ssm-qan-app-9.4.1
-        - silicon-toolkit-3.5.7.1
-        - ssm-dashboards-9.4.1
-        - ssm-server-9.4.1
-        - ssm-client-9.4.1
-        - ssm-manage-9.4.1
-        - ssm-managed-9.4.1
-        - rds_exporter-9.4.1
-        - snmp_exporter-9.4.1
+        - prometheus-2.50.1{{ ssm_package_suffix }}
+        - ssm-qan-api-9.4.1{{ ssm_package_suffix }}
+        - ssm-qan-app-9.4.1{{ ssm_package_suffix }}
+        - silicon-toolkit-3.5.7.1{{ ssm_package_suffix }}
+        - ssm-dashboards-9.4.1{{ ssm_package_suffix }}
+        - ssm-server-9.4.1{{ ssm_package_suffix }}
+        - ssm-client-9.4.1{{ ssm_package_suffix }}
+        - ssm-manage-9.4.1{{ ssm_package_suffix }}
+        - ssm-managed-9.4.1{{ ssm_package_suffix }}
+        - rds_exporter-9.4.1{{ ssm_package_suffix }}
+        - snmp_exporter-9.4.1{{ ssm_package_suffix }}
 
     - name: SSM                        | Install MariaDB 10.4
       when: ansible_os_family == 'RedHat'
-      shell: microdnf -y --enablerepo ssm install --nodocs --noplugins --best MariaDB-server MariaDB-client
+      shell: microdnf -y --enablerepo ssm install --nodocs --noplugins --best MariaDB-server-10.4.35{{ ssm_package_suffix }} MariaDB-client-10.4.35{{ ssm_package_suffix }}
 
     - name: NGINX SSL Certificate      | Add script
       copy:

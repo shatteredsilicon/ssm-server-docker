@@ -14,9 +14,13 @@ RUN (rkhunter --update || true) && rkhunter --propupd
 COPY playbook-install.yml /opt/playbook-install.yml
 COPY playbook-init.yml /opt/playbook-init.yml
 
+ARG env=env
+ARG ssm_repo_url=ssm_repo_url
+ARG ssm_repo_gpgkey=ssm_repo_gpgkey
+
 RUN microdnf -y install --nodocs --noplugins --best ansible-core sqlite && \
     ansible-galaxy collection install community.general community.mysql && \
-    ansible-playbook -vvv -i 'localhost,' -c local /opt/playbook-install.yml && \
+    ENV=${env} SSM_REPO_URL=${ssm_repo_url} SSM_REPO_GPGKEY=${ssm_repo_gpgkey} ansible-playbook -vvv -i 'localhost,' -c local /opt/playbook-install.yml && \
     ansible-playbook -vvv -i 'localhost,' -c local /opt/playbook-init.yml && \
     microdnf -y remove ansible-core && microdnf -y clean all
 

@@ -1,7 +1,10 @@
 SHELL	= /bin/bash
 
-BUILDDIR	?= /tmp/ssmbuild
-VERSION		?= 9.4.1
+BUILDDIR		?= /tmp/ssmbuild
+VERSION			?=
+ENV				?=
+SSM_REPO_URL	?=
+SSM_REPO_GPGKEY	?=
 
 .PHONY: all
 all: docker
