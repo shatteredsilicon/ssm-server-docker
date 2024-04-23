@@ -8,6 +8,10 @@ RUN microdnf -y update && \
     microdnf -y install --nodocs --noplugins --best shadow-utils rkhunter file && \
     microdnf -y clean all
 
+# install SSM packages
+COPY ssm.repo /etc/yum.repos.d/ssm.repo
+RUN microdnf -y --enablerepo ssm install ssm-meta-9.3.0
+
 RUN useradd -s /bin/false ssm
 RUN (rkhunter --update || true) && rkhunter --propupd
 
