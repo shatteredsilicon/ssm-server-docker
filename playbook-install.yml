@@ -4,18 +4,6 @@
   gather_facts: yes
 
   tasks:
-    - name: Packages                   | Add SSM repository
-      when: ansible_os_family == 'RedHat'
-      copy:
-        dest: /etc/yum.repos.d/ssm.repo
-        content: |
-          [ssm]
-          name=SSM repo
-          baseurl=https://dl.shatteredsilicon.net/ssm/$releasever/RPMS/$basearch/
-          gpgkey=https://dl.shatteredsilicon.net/ssm/$releasever/RPM-GPG-KEY-SSM-EL$releasever
-          gpgcheck=1
-          enabled=0
-
     - name: Packages                   | Install OS tools
       when: ansible_os_family == 'RedHat'
       shell: microdnf -y install --nodocs --noplugins --best {{ item }}
@@ -87,21 +75,6 @@
         - nginx
         - consul
         - grafana
-        - prometheus
-        - ssm-qan-api-9.4.1
-        - ssm-qan-app-9.4.1
-        - silicon-toolkit-3.5.7.1
-        - ssm-dashboards-9.4.1
-        - ssm-server-9.4.1
-        - ssm-client-9.4.1
-        - ssm-manage-9.4.1
-        - ssm-managed-9.4.1
-        - rds_exporter-9.4.1
-        - snmp_exporter-9.4.1
-
-    - name: SSM                        | Install MariaDB 10.4
-      when: ansible_os_family == 'RedHat'
-      shell: microdnf -y --enablerepo ssm install --nodocs --noplugins --best MariaDB-server MariaDB-client
 
     - name: NGINX SSL Certificate      | Add script
       copy:
