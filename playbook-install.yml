@@ -55,19 +55,6 @@
         dest: /var/lib/cloud/scripts/per-once/init-mysql-password
         mode: 0755
 
-    - name: SSM                        | Create grafana group
-      group:
-        gid: 472
-        name: grafana
-
-    - name: SSM                        | Create grafana user
-      user:
-        uid: 472
-        name: grafana
-        group: grafana
-        home: /var/lib/grafana
-        shell: /sbin/nologin
-
     - name: SSM                        | Install RPMs
       when: ansible_os_family == 'RedHat'
       shell: microdnf -y --enablerepo ssm install --nodocs --noplugins --best {{ item }}
