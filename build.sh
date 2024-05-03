@@ -60,10 +60,6 @@ build() {
     > ${vt_files}
     > ${vt_log}
 
-    # check rkhunter log file
-    check_rkhunter_log ${image_dir}/var/log/ssm-server-rkhunter.log ${log_file} ${vt_files}
-    rm -f ${image_dir}/var/log/ssm-server-rkhunter.log
-
     # check clamdscan log file
     echo $'\n' >> ${log_file}
     check_clamdscan_log ${BUILDDIR}/ssm-server-clamdscan.log ${log_file} ${vt_files}
@@ -121,32 +117,6 @@ build() {
 
     docker tag ${slim_image_name} shatteredsilicon/ssm-server:${VERSION}
     docker tag ${slim_image_name} shatteredsilicon/ssm-server:latest
-}
-
-check_rkhunter_log() {
-    local log_file=$1
-    local dest_file=$2
-    local vt_files=$3
-
-    echo $'rkhunter scanning\n=================\n' >> "$dest_file"
-
-    if [ -s "$log_file" ]; then
-        while read -r line; do
-            if [ -z "$line" ] || [[ "$line" =~ ^[[:space:]]+$ ]]; then
-                break
-            fi
-
-            echo "$line" >> "$dest_file"
-            local filename=$(echo "$line" | grep -oP '(?<=\[\d{2}:\d{2}:\d{2}\])\s*/.*(?=\s+\[ Warning \])' | awk '{$1=$1};1')
-            if [ -f "${image_dir}${filename}" ] && [ -s "${image_dir}${filename}" ]; then
-                local resp="$(vt scan file "${image_dir}${filename}")"
-                if [[ "${resp}" =~ "Quota exceeded" ]]; then
-                    exit 1
-                fi
-                echo "${resp}" >> "${vt_files}"
-            fi
-        done < "$log_file"
-    fi
 }
 
 check_clamdscan_log() {
