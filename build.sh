@@ -29,7 +29,7 @@ build() {
     # docker-slim
     local slim_image_name=shatteredsilicon/ssm-server-slim:latest
     local slim_base_path=${BUILDDIR}/docker-slim
-    slim --state-path ${slim_base_path} build --target ${image_id} --tag ${slim_image_name} --include-path-file ./include-path --include-exe-file ./include-exe
+    slim --report off --state-path ${slim_base_path} build --target ${image_id} --tag ${slim_image_name} --include-path-file ./include-path --include-exe-file ./include-exe
 
     # use clamd@scan service to scan the docker image
     local image_tar=${BUILDDIR}/ssm-server-slim-image.tar
