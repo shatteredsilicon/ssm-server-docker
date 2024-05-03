@@ -1,7 +1,7 @@
 SHELL	= /bin/bash
 
 BUILDDIR	?= /tmp/ssmbuild
-VERSION		?= 9.4.1
+VERSION		?=
 
 .PHONY: all
 all: docker
