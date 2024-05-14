@@ -1,4 +1,5 @@
 FROM rockylinux:9.3-minimal AS builder
+ARG install_repo=ssm-dev
 
 # exclude MariaDB in appstream repo
 RUN sed -i "/\[appstream\]/a exclude=mariadb*,galera*,boost-program-options" /etc/yum.repos.d/rocky.repo
@@ -10,6 +11,7 @@ RUN microdnf -y update && \
 
 # install SSM packages
 COPY ssm.repo /etc/yum.repos.d/ssm.repo
+RUN sed -i "s/_INSTALLREPO_/${install_repo}/g" /etc/yum.repos.d/ssm.repo
 RUN microdnf -y --enablerepo ssm install ssm-meta-9.3.0
 
 RUN useradd -s /bin/false ssm

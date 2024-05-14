@@ -1,6 +1,6 @@
 [ssm]
 name=SSM repo
-baseurl=https://dl.shatteredsilicon.net/ssm/$releasever/RPMS/$basearch/
-gpgkey=https://dl.shatteredsilicon.net/ssm/$releasever/RPM-GPG-KEY-SSM-EL$releasever
+baseurl=https://dl.shatteredsilicon.net/_INSTALLREPO_/$releasever/RPMS/$basearch/
+gpgkey=https://dl.shatteredsilicon.net/_INSTALLREPO_/$releasever/RPM-GPG-KEY-SSM-EL$releasever
 gpgcheck=1
 enabled=0
