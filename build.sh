@@ -6,6 +6,8 @@ umask 0000
 
 BUILDDIR=
 VERSION=
+IMAGENAME="shatteredsilicon/ssm-server"
+INSTALLREPO="ssm-dev"
 
 build() {
     local logs_dir=${BUILDDIR}/results/logs
@@ -13,7 +15,7 @@ build() {
 
     local image_id_file=${BUILDDIR}/ssm-server-image-id
     touch ${image_id_file}
-    docker build --build-arg ssm_version=${VERSION} --iidfile ${image_id_file} .
+    docker build --build-arg ssm_version=${VERSION} --build-arg install_repo="${INSTALLREPO}" --iidfile ${image_id_file} .
     local image_id=$(cat ${image_id_file})
 
     local origin_image_tar=${BUILDDIR}/ssm-server-image.tar
@@ -115,8 +117,8 @@ build() {
     # clean temporary files/directories
     rm -rf "${image_tar}" "${image_dir}" "${origin_image_tar}" "${origin_image_dir}" "${slim_base_path}"
 
-    docker tag ${slim_image_name} shatteredsilicon/ssm-server:${VERSION}
-    docker tag ${slim_image_name} shatteredsilicon/ssm-server:latest
+    docker tag ${slim_image_name} "${IMAGENAME}:${VERSION}"
+    docker tag ${slim_image_name} "${IMAGENAME}:latest"
 }
 
 check_clamdscan_log() {
@@ -212,8 +214,20 @@ check_removed_files() {
 }
 
 main() {
-    BUILDDIR=$1
-    VERSION=$2
+    while getopts "b:v:n:r:" OPT
+    do
+        case "${OPT}" in
+            b) BUILDDIR="${OPTARG}" ;;
+            v) VERSION="${OPTARG}" ;;
+            n) IMAGENAME="${OPTARG}" ;;
+            r) INSTALLREPO="${OPTARG}" ;;
+        esac
+    done
+
+    [ -n "${BUILDDIR}" ] || { echo "Specify build dir"; exit -1 ; }
+    [ -n "${VERSION}" ] || { echo "Specify version number"; exit -1 ; }
+    [ -n "${IMAGENAME}" ] || { echo "Specify image name"; exit -1 ; }
+    [ -n "${INSTALLREPO}" ] || { echo "Specify install repo"; exit -1 ; }
 
     build
 }

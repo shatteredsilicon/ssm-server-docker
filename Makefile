@@ -9,4 +9,4 @@ all: docker
 .PHONY: docker
 docker:
 	mkdir -vp $(BUILDDIR)
-	./build.sh $(BUILDDIR) $(VERSION)
+	./build.sh -b "$(BUILDDIR)" -v "$(VERSION)" -n "shatteredsilicon/ssm-server-${HOSTTYPE}"
