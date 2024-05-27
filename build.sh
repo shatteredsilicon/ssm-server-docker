@@ -202,7 +202,7 @@ check_removed_files() {
         fi
     done < <(cd "${origin_image_dir}" ; find . -type f)
 
-    docker run --rm -v $(dirname "${log_file}"):/root/logs ${origin_image_id} sh -c "
+    docker run --rm -v $(dirname "${log_file}"):/root/logs:z ${origin_image_id} sh -c "
         set -o errexit
         set -o xtrace
 
