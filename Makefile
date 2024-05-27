@@ -10,3 +10,7 @@ all: docker
 docker:
 	mkdir -vp $(BUILDDIR)
 	./build.sh -b "$(BUILDDIR)" -v "$(VERSION)" -n "shatteredsilicon/ssm-server-$(shell uname -p)"
+
+.PHONY: clean
+clean:
+	rm -rf $(BUILDDIR)/{results,docker-slim} $(BUILDDIR)/ssm-server*
