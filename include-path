@@ -21,6 +21,7 @@
 /var/run
 /var/lib
 /var/log
+/var/spool/cron
 /usr/lib
 /usr/lib64
 /usr/libexec
