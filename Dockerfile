@@ -12,7 +12,7 @@ RUN microdnf -y update && \
 # install SSM packages
 COPY ssm.repo /etc/yum.repos.d/ssm.repo
 RUN sed -i "s/_INSTALLREPO_/${install_repo}/g" /etc/yum.repos.d/ssm.repo
-RUN microdnf -y --enablerepo ssm install ssm-meta-9.3.0
+RUN microdnf -y --enablerepo ssm install ssm-meta-9.3.4
 
 RUN useradd -s /bin/false ssm
 
