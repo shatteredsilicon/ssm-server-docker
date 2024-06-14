@@ -4,8 +4,9 @@ ARG install_repo=ssm-dev
 # exclude MariaDB in appstream repo
 RUN sed -i "/\[appstream\]/a exclude=mariadb*,galera*,boost-program-options" /etc/yum.repos.d/rocky.repo
 
-RUN microdnf -y update && \
-    microdnf -y install epel-release && \
+# Ignore return value of microdnf as it seems to succeed but return a failure code on some hosts
+RUN microdnf -y update || /bin/true
+RUN microdnf -y install epel-release && \
     microdnf -y install --nodocs --noplugins --best shadow-utils file && \
     microdnf -y clean all
 
