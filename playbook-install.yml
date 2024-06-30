@@ -162,7 +162,7 @@
         path: /etc/grafana/grafana.ini
         section: plugins
         option: allow_loading_unsigned_plugins
-        value: pmm-app,pmm-add-instance-app-panel,pmm-qan-app-panel,pmm-qan-settings-app-panel,pmm-remote-instances-panel,pmm-singlestat-panel,pmm-system-summary-app-panel,pmm-update-panel,ssm-filtertable-panel
+        value: pmm-app,pmm-add-instance-app-panel,pmm-qan-app-panel,pmm-qan-settings-app-panel,pmm-remote-instances-panel,pmm-singlestat-panel,pmm-system-summary-app-panel,pmm-update-panel,ssm-filtertable-panel,ssm-blockmap-panel
 
     - name: Grafana                    | Set DATA_DIR
       when: not grafana_db.stat.exists
