@@ -38,3 +38,5 @@
 /usr/bin/wc
 /usr/bin/chown
 /usr/bin/mv
+/usr/bin/cp
+/usr/bin/rm
