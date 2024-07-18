@@ -77,7 +77,7 @@
 
     - name: SSM                        | Wait for mysqld start
       wait_for:
-        port: 3306
+        path: /var/lib/mysql/mysql.sock
         state: present
         delay: 30
         timeout: 60
