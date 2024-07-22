@@ -109,6 +109,13 @@
       with_items:
         - /srv/update
 
+    - name: SSM                        | Delete the anonymous MySQL user
+      community.mysql.mysql_user:
+        login_unix_socket: /var/lib/mysql/mysql.sock
+        name: ''
+        host: buildkitsandbox
+        state: absent
+
     - name: SSM                        | Stop services
       shell: supervisorctl shutdown
 
