@@ -7,7 +7,7 @@ RUN sed -i "/\[appstream\]/a exclude=mariadb*,galera*,boost-program-options" /et
 # Ignore return value of microdnf as it seems to succeed but return a failure code on some hosts
 RUN microdnf -y update || /bin/true
 RUN microdnf -y install epel-release
-RUN microdnf -y install --nodocs --noplugins --best shadow-utils file
+RUN microdnf -y install --nodocs --noplugins --best shadow-utils file findutils
 
 # install SSM packages
 COPY ssm.repo /etc/yum.repos.d/ssm.repo
