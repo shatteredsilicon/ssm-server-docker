@@ -40,4 +40,8 @@
 /usr/bin/mv
 /usr/bin/cp
 /usr/bin/rm
+/usr/bin/tee
+/usr/bin/basename
+/usr/bin/uniq
+/usr/bin/find
 /bin/ls
