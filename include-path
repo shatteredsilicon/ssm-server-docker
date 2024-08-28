@@ -1,6 +1,7 @@
 /opt/ss
 /usr/share/ssm-dashboards
 /usr/share/ssm-qan-app
+/usr/share/ssm-qan-api
 /usr/share/ssm-server
 /usr/share/prometheus
 /usr/share/grafana
