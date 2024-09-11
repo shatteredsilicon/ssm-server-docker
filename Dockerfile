@@ -12,7 +12,7 @@ RUN microdnf -y install --nodocs --noplugins --best shadow-utils file findutils
 # install SSM packages
 COPY ssm.repo /etc/yum.repos.d/ssm.repo
 RUN sed -i "s/_INSTALLREPO_/${install_repo}/g" /etc/yum.repos.d/ssm.repo
-RUN microdnf -y --enablerepo ssm install ssm-meta-9.4.2
+RUN microdnf -y --enablerepo ssm install ssm-meta-9.4.3
 
 RUN useradd -s /bin/false ssm
 
