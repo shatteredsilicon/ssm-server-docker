@@ -13,7 +13,6 @@
         - python3-pip
         - cronie
         - yum-utils
-        - tar
 
     - name: Packages                   | Add hashicorp repo
       shell: yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
@@ -185,14 +184,3 @@
         section: supervisorctl
         option: password
         value: dummy
-
-    - name: Prometheus                 | Create Prometheus web ui directory
-      file: path={{ item }} state=directory
-      with_items:
-        - /usr/share/prometheus/web/ui
-
-    - name: Prometheus                 | Add Prebuilt UI Assets
-      ansible.builtin.unarchive:
-        src: https://github.com/prometheus/prometheus/releases/download/v2.51.2/prometheus-web-ui-2.51.2.tar.gz
-        dest: /usr/share/prometheus/web/ui/
-        remote_src: yes
