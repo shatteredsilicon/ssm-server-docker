@@ -162,7 +162,7 @@
         path: /etc/grafana/grafana.ini
         section: plugins
         option: allow_loading_unsigned_plugins
-        value: ssm-app,ssm-add-instance-app-panel,ssm-qan-app-panel,ssm-qan-settings-app-panel,ssm-remote-instances-panel,ssm-singlestat-panel,ssm-system-summary-app-panel,ssm-update-panel,ssm-filtertable-panel,ssm-blockmap-panel
+        value: ssm-app,ssm-add-instance-app-panel,ssm-qan-app-panel,ssm-qan-settings-app-panel,ssm-remote-instances-panel,ssm-singlestat-panel,ssm-system-summary-app-panel,ssm-update-panel,ssm-filtertable-panel,ssm-blockmap-panel,ssm-rangestat-panel
 
     - name: Grafana                    | Set DATA_DIR
       when: not grafana_db.stat.exists
