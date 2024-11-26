@@ -156,6 +156,22 @@
         option: external_snapshot_name
         value: Share with Shattered Silicon
 
+    - name: Grafana                    | Enable Angular plugins
+      when: not grafana_db.stat.exists
+      community.general.ini_file:
+        path: /etc/grafana/grafana.ini
+        section: security
+        option: angular_support_enabled
+        value: true
+
+    - name: Grafana                    | Disable Angular deprecation UI warnings
+      when: not grafana_db.stat.exists
+      community.general.ini_file:
+        path: /etc/grafana/grafana.ini
+        section: feature_toggles
+        option: angularDeprecationUI
+        value: false
+
     - name: Grafana                    | Set plugins
       when: not grafana_db.stat.exists
       community.general.ini_file:
@@ -163,6 +179,14 @@
         section: plugins
         option: allow_loading_unsigned_plugins
         value: ssm-app,ssm-add-instance-app-panel,ssm-qan-app-panel,ssm-qan-settings-app-panel,ssm-remote-instances-panel,ssm-singlestat-panel,ssm-system-summary-app-panel,ssm-update-panel,ssm-filtertable-panel,ssm-blockmap-panel,ssm-rangestat-panel
+
+    - name: Grafana                    | Set home dashboard
+      when: not grafana_db.stat.exists
+      community.general.ini_file:
+        path: /etc/grafana/grafana.ini
+        section: dashboards
+        option: default_home_dashboard_path
+        value: /usr/share/ssm-dashboards/ssm-app/dist/dashboards/Home_Dashboard.json
 
     - name: Grafana                    | Set DATA_DIR
       when: not grafana_db.stat.exists
