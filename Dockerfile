@@ -2,12 +2,16 @@ FROM rockylinux/rockylinux:9.4-minimal AS builder
 ARG install_repo=ssm-dev
 
 # exclude MariaDB in appstream repo
-RUN sed -i "/\[appstream\]/a exclude=mariadb*,galera*,boost-program-options" /etc/yum.repos.d/rocky.repo
+RUN sed -i "/\[appstream\]/a exclude=mariadb*,galera*,boost-program-options,grafana*" /etc/yum.repos.d/rocky.repo
 
 # Ignore return value of microdnf as it seems to succeed but return a failure code on some hosts
 RUN microdnf -y update || /bin/true
 RUN microdnf -y install epel-release
 RUN microdnf -y install --nodocs --noplugins --best shadow-utils file findutils
+
+# Set up Grafana repo
+RUN rpm --import https://rpm.grafana.com/gpg.key
+COPY grafana.repo /etc/yum.repos.d/grafana.repo
 
 # install SSM packages
 COPY ssm.repo /etc/yum.repos.d/ssm.repo
