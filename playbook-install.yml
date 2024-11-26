@@ -61,7 +61,7 @@
       with_items:
         - nginx
         - consul
-        - grafana
+        - grafana-11.*
 
     - name: NGINX SSL Certificate      | Add script
       copy:
