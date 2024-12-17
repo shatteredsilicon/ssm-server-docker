@@ -172,6 +172,14 @@
         option: angularDeprecationUI
         value: false
 
+    - name: Grafana                    | Migrate old graph panel to supported time series panel
+      when: not grafana_db.stat.exists
+      community.general.ini_file:
+        path: /etc/grafana/grafana.ini
+        section: feature_toggles
+        option: autoMigrateGraphPanel
+        value: true
+
     - name: Grafana                    | Set plugins
       when: not grafana_db.stat.exists
       community.general.ini_file:
