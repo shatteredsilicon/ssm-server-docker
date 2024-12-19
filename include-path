@@ -29,6 +29,7 @@
 /usr/bin/pt-visual-explain
 /usr/bin/pt-summary
 /usr/bin/pt-mysql-summary
+/usr/bin/pt-archiver
 /usr/bin/supervisorctl
 /usr/bin/mktemp
 /usr/bin/date
