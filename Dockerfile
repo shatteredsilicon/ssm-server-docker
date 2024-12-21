@@ -16,7 +16,7 @@ COPY grafana.repo /etc/yum.repos.d/grafana.repo
 # install SSM packages
 COPY ssm.repo /etc/yum.repos.d/ssm.repo
 RUN sed -i "s/_INSTALLREPO_/${install_repo}/g" /etc/yum.repos.d/ssm.repo
-RUN microdnf -y --enablerepo ssm install ssm-meta-9.4.3
+RUN microdnf -y --enablerepo ssm install ssm-meta-9.4.4
 
 RUN useradd -s /bin/false ssm
 
