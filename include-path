@@ -7,6 +7,7 @@
 /usr/share/grafana
 /usr/share/snmp
 /usr/share/perl5
+/usr/share/p11-kit/modules
 /etc/nginx
 /etc/supervisor.d
 /etc/supervisor.conf
@@ -48,3 +49,9 @@
 /usr/bin/find
 /bin/ls
 /bin/true
+/bin/tail
+/bin/vi
+/bin/update-ca-trust
+/bin/trust
+/bin/p11-kit
+/bin/openssl
