@@ -22,11 +22,11 @@ build() {
     local image_id_file=${BUILDDIR}/ssm-server-image-id
     touch ${image_id_file}
     docker build --no-cache --build-arg ssm_version=${VERSION} --build-arg install_repo="${INSTALLREPO}" --iidfile ${image_id_file} .
-    local image_id=$(cat ${image_id_file})
+    local origin_image_id=$(cat ${image_id_file})
 
     local origin_image_tar=${BUILDDIR}/ssm-server-image.tar
     local origin_image_dir=${BUILDDIR}/ssm-server-image
-    local origin_cid=$(docker create ${image_id})
+    local origin_cid=$(docker create ${origin_image_id})
     docker export $origin_cid -o ${origin_image_tar}
     docker rm ${origin_cid}
     mkdir -vp ${origin_image_dir}
@@ -34,26 +34,32 @@ build() {
     find ${origin_image_dir} -type d -exec chmod 0777 {} \;
     find ${origin_image_dir} -type f -exec chmod 0666 {} \;
 
-    # docker-slim
-    local slim_image_name=shatteredsilicon/ssm-server-slim:latest
-    local slim_base_path=${BUILDDIR}/docker-slim
-    slim --report off --state-path ${slim_base_path} build --target ${image_id} --tag ${slim_image_name} --include-path-file ./include-path --include-exe-file ./include-exe
+    local image_id=${origin_image_id}
+    local image_dir=${origin_image_dir}
+    if ! [[ "${INSTALLREPO}" = "ssm-dev" ]]
+    then
+        # docker-slim
+        local slim_image_name=shatteredsilicon/ssm-server-slim:latest
+        local slim_base_path=${BUILDDIR}/docker-slim
+        slim --report off --state-path ${slim_base_path} build --target ${origin_image_id} --tag ${slim_image_name} --include-path-file ./include-path --include-exe-file ./include-exe
+        image_id=${slim_image_name}
+
+        local image_tar=${BUILDDIR}/ssm-server-slim-image.tar
+        image_dir=${BUILDDIR}/ssm-server-slim-image
+        local cid=$(docker create ${slim_image_name})
+        docker export $cid -o ${image_tar}
+        docker rm ${cid}
+        mkdir -vp ${image_dir}
+        rm -rf ${image_dir}/* && tar -C ${image_dir} -xf ${image_tar}
+        find ${image_dir} -type d -exec chmod 0777 {} \;
+        find ${image_dir} -type f -exec chmod 0666 {} \;
+
+        local removed_log_file=${logs_dir}/docker-slim-removed-files.log
+        > ${removed_log_file}
+        check_removed_files ${origin_image_dir} ${image_dir} ${removed_log_file} ${origin_image_id}
+    fi
 
     # use clamd@scan service to scan the docker image
-    local image_tar=${BUILDDIR}/ssm-server-slim-image.tar
-    local image_dir=${BUILDDIR}/ssm-server-slim-image
-    local cid=$(docker create ${slim_image_name})
-    docker export $cid -o ${image_tar}
-    docker rm ${cid}
-    mkdir -vp ${image_dir}
-    rm -rf ${image_dir}/* && tar -C ${image_dir} -xf ${image_tar}
-    find ${image_dir} -type d -exec chmod 0777 {} \;
-    find ${image_dir} -type f -exec chmod 0666 {} \;
-
-    local removed_log_file=${logs_dir}/docker-slim-removed-files.log
-    > ${removed_log_file}
-    check_removed_files ${origin_image_dir} ${image_dir} ${removed_log_file} ${image_id}
-
     > ${BUILDDIR}/ssm-server-clamdscan.log
     find ${image_dir} -type d -exec chmod 0777 {} \;
     find ${image_dir} -type f ! -executable -exec chmod 0666 {} \;
@@ -123,8 +129,8 @@ build() {
     # clean temporary files/directories
     rm -rf "${image_tar}" "${image_dir}" "${origin_image_tar}" "${origin_image_dir}" "${slim_base_path}"
 
-    docker tag ${slim_image_name} "${IMAGENAME}:${VERSION}"
-    docker tag ${slim_image_name} "${IMAGENAME}:latest"
+    docker tag ${image_id} "${IMAGENAME}:${VERSION}"
+    docker tag ${image_id} "${IMAGENAME}:latest"
 }
 
 check_clamdscan_log() {
