@@ -1,0 +1,6 @@
+[shatteredsilicon-mariadb-10.4]
+name = Shattered Silicon MariaDB Packages ($basearch)
+baseurl = https://dl.shatteredsilicon.net/MariaDB/el/$releasever/10.4/RPMS/$basearch/
+gpgkey = https://dl.shatteredsilicon.net/MariaDB/el/RPM-GPG-KEY-SS-MARIADB
+gpgcheck = 1
+enabled = 1

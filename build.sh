@@ -36,28 +36,6 @@ build() {
 
     local image_id=${origin_image_id}
     local image_dir=${origin_image_dir}
-    if ! [[ "${INSTALLREPO}" = "ssm-dev" ]]
-    then
-        # docker-slim
-        local slim_image_name=shatteredsilicon/ssm-server-slim:latest
-        local slim_base_path=${BUILDDIR}/docker-slim
-        slim --report off --state-path ${slim_base_path} build --target ${origin_image_id} --tag ${slim_image_name} --include-path-file ./include-path --include-exe-file ./include-exe
-        image_id=${slim_image_name}
-
-        local image_tar=${BUILDDIR}/ssm-server-slim-image.tar
-        image_dir=${BUILDDIR}/ssm-server-slim-image
-        local cid=$(docker create ${slim_image_name})
-        docker export $cid -o ${image_tar}
-        docker rm ${cid}
-        mkdir -vp ${image_dir}
-        rm -rf ${image_dir}/* && tar -C ${image_dir} -xf ${image_tar}
-        find ${image_dir} -type d -exec chmod 0777 {} \;
-        find ${image_dir} -type f -exec chmod 0666 {} \;
-
-        local removed_log_file=${logs_dir}/docker-slim-removed-files.log
-        > ${removed_log_file}
-        check_removed_files ${origin_image_dir} ${image_dir} ${removed_log_file} ${origin_image_id}
-    fi
 
     # use clamd@scan service to scan the docker image
     > ${BUILDDIR}/ssm-server-clamdscan.log
@@ -194,35 +172,6 @@ check_vt_log() {
     if [ -s "$log_file" ]; then
         cat "$log_file" >> "$dest_file"
     fi
-}
-
-check_removed_files() {
-    local origin_image_dir=$1
-    local slim_image_dir=$2
-    local log_file=$3
-    local origin_image_id=$4
-
-    while read -r filename; do
-        if ! [[ -f "${slim_image_dir%%/}/${filename}" ]]; then
-            echo "${filename##'.'}" >> "${log_file}"
-        fi
-    done < <(cd "${origin_image_dir}" ; find . -type f)
-
-    docker run --rm -v $(dirname "${log_file}"):/root/logs:z ${origin_image_id} sh -c "
-        set -o errexit
-        set -o xtrace
-
-        log_file=/root/logs/$(basename ${log_file})
-        cp \${log_file} /tmp/docker-slim-removed-files.log
-        i=1
-        while read -r line; do
-            package=\"\$(rpm -qf \"\${line}\" | head -n 1)\" || true
-            if ! [[ \"\${package}\" =~ 'is not owned by any package'$ ]]; then
-                sed -i \"\${i}s/$/: \${package}/\" \${log_file}
-            fi
-            i=\$((i+1))
-        done < /tmp/docker-slim-removed-files.log
-    "
 }
 
 main() {
