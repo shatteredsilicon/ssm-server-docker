@@ -17,6 +17,7 @@ COPY grafana.repo /etc/yum.repos.d/grafana.repo
 COPY ss-mariadb-10.4.repo /etc/yum.repos.d/ss-mariadb-10.4.repo
 
 # install Percona Toolkit repo
+RUN rpm --import https://repo.percona.com/percona/yum/RPM-GPG-KEY-Percona
 COPY percona-pt-release.repo /etc/yum.repos.d/percona-pt-release.repo
 
 # install SSM packages
