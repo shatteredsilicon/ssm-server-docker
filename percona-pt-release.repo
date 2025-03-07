@@ -3,4 +3,5 @@ name = Percona Toolkit release YUM repository
 baseurl = http://repo.percona.com/pt/yum/release/$releasever/RPMS/$basearch
 enabled = 0
 gpgcheck = 1
-gpgkey = https://repo.percona.com/percona/yum/RPM-GPG-KEY-Percona
+gpgkey = https://repo.percona.com/yum/PERCONA-PACKAGING-KEY
+        https://www.percona.com/downloads/RPM-GPG-KEY-percona
