@@ -16,10 +16,13 @@ COPY grafana.repo /etc/yum.repos.d/grafana.repo
 # install Shattered Silicon MariaDB repo
 COPY ss-mariadb-10.4.repo /etc/yum.repos.d/ss-mariadb-10.4.repo
 
+# install Percona Toolkit repo
+COPY percona-pt-release.repo /etc/yum.repos.d/percona-pt-release.repo
+
 # install SSM packages
 COPY ssm.repo /etc/yum.repos.d/ssm.repo
 RUN sed -i "s/_INSTALLREPO_/${install_repo}/g" /etc/yum.repos.d/ssm.repo
-RUN microdnf -y --enablerepo ssm --enablerepo shatteredsilicon-mariadb-10.4 install ssm-meta-9.4.5
+RUN microdnf -y --enablerepo ssm --enablerepo shatteredsilicon-mariadb-10.4 --enablerepo percona-pt-release install ssm-meta-9.4.5
 
 RUN useradd -s /bin/false ssm
 
