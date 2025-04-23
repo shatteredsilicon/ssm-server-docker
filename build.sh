@@ -13,11 +13,9 @@ build() {
     local logs_dir=${BUILDDIR}/results/logs
     mkdir -vp ${logs_dir}
 
-    if [ "$(uname -p)" = "aarch64" ]
-    then
-        # Builds on AArch64 with a zfs filesystem using buildkit fail, so disable buildkit
-        export DOCKER_BUILDKIT=0
-    fi
+    # Builds on AArch64 with a zfs filesystem using buildkit fail,
+    # buildkit also doesn't support --squash option, so disable buildkit
+    export DOCKER_BUILDKIT=0
 
     local image_id_file=${BUILDDIR}/ssm-server-image-id
     touch ${image_id_file}
