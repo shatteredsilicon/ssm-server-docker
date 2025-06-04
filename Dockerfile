@@ -22,7 +22,7 @@ COPY percona-pt-release.repo /etc/yum.repos.d/percona-pt-release.repo
 # install SSM packages
 COPY ssm.repo /etc/yum.repos.d/ssm.repo
 RUN sed -i "s/_INSTALLREPO_/${install_repo}/g" /etc/yum.repos.d/ssm.repo
-RUN microdnf -y --enablerepo ssm --enablerepo shatteredsilicon-mariadb-10.4 --enablerepo percona-pt-release install ssm-meta-9.4.8
+RUN microdnf -y --enablerepo ssm --enablerepo shatteredsilicon-mariadb-10.4 --enablerepo percona-pt-release install ssm-meta-9.4.9
 
 RUN useradd -s /bin/false ssm
 
