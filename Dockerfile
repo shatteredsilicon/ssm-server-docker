@@ -1,4 +1,4 @@
-FROM rockylinux/rockylinux:9.4-minimal AS builder
+FROM rockylinux/rockylinux:9.6-minimal AS builder
 ARG install_repo=ssm-dev
 
 # exclude MariaDB in appstream repo
