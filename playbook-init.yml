@@ -101,7 +101,7 @@
 
     - name: SSM                        | Wait for dashboards
       wait_for:
-        path: /var/lib/grafana/PERCONA_DASHBOARDS_VERSION
+        path: /var/lib/grafana/plugins/ssm-app/VERSION
         state: present
 
     - name: SSM                        | Create ssm-update dirs
