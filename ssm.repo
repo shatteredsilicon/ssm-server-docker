@@ -4,3 +4,10 @@ baseurl=https://dl.shatteredsilicon.net/_INSTALLREPO_/$releasever/RPMS/$basearch
 gpgkey=https://dl.shatteredsilicon.net/_INSTALLREPO_/$releasever/RPM-GPG-KEY-SSM-EL$releasever
 gpgcheck=1
 enabled=0
+
+[ssm-9.4]
+name=SSM 9.4 repo
+baseurl=https://dl.shatteredsilicon.net/_INSTALLREPO_/9.4/RPMS/$basearch/
+gpgkey=https://dl.shatteredsilicon.net/_INSTALLREPO_/9.4/RPM-GPG-KEY-SSM-EL$releasever
+gpgcheck=1
+enabled=0
