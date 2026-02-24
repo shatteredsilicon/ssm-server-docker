@@ -4,4 +4,4 @@ baseurl = http://repo.percona.com/pt/yum/release/$releasever/RPMS/$basearch
 enabled = 0
 gpgcheck = 1
 gpgkey = https://repo.percona.com/yum/PERCONA-PACKAGING-KEY
-        https://www.percona.com/downloads/RPM-GPG-KEY-percona
+        https://repo.percona.com/yum/RPM-GPG-KEY-Percona
