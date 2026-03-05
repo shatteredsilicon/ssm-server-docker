@@ -4,3 +4,17 @@ baseurl=https://dl.shatteredsilicon.net/_INSTALLREPO_/$releasever/RPMS/$basearch
 gpgkey=https://dl.shatteredsilicon.net/_INSTALLREPO_/$releasever/RPM-GPG-KEY-SSM-EL$releasever
 gpgcheck=1
 enabled=0
+
+[ssm-9.5]
+name=SSM 9.5 repo
+baseurl=https://dl.shatteredsilicon.net/_INSTALLREPO_/9.5/RPMS/$basearch/
+gpgkey=https://dl.shatteredsilicon.net/_INSTALLREPO_/9.5/RPM-GPG-KEY-SSM-EL$releasever
+gpgcheck=1
+enabled=0
+
+[ssm-prometheus]
+name=SSM Prometheus 2.53 repo
+baseurl=https://dl.shatteredsilicon.net/_INSTALLREPO_/2.53/RPMS/$basearch/
+gpgkey=https://dl.shatteredsilicon.net/_INSTALLREPO_/$releasever/RPM-GPG-KEY-SSM-EL$releasever
+gpgcheck=1
+enabled=0
