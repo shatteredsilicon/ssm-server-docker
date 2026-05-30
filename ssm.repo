@@ -14,7 +14,7 @@ enabled=0
 
 [ssm-snmp-exporter]
 name=SSM snmp_exporter repo
-baseurl=https://dl.shatteredsilicon.net/_INSTALLREPO_/0.25/RPMS/$basearch/
-gpgkey=https://dl.shatteredsilicon.net/_INSTALLREPO_/$releasever/RPM-GPG-KEY-SSM-EL$releasever
+baseurl=https://dl.shatteredsilicon.net/ssm-dev/0.25/RPMS/$basearch/
+gpgkey=https://dl.shatteredsilicon.net/ssm-dev/$releasever/RPM-GPG-KEY-SSM-EL$releasever
 gpgcheck=1
 enabled=0
