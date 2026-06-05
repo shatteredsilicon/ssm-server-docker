@@ -1,10 +1,3 @@
-[ssm]
-name=SSM repo
-baseurl=https://dl.shatteredsilicon.net/_INSTALLREPO_/$releasever/RPMS/$basearch/
-gpgkey=https://dl.shatteredsilicon.net/_INSTALLREPO_/$releasever/RPM-GPG-KEY-SSM-EL$releasever
-gpgcheck=1
-enabled=0
-
 [ssm-9.4]
 name=SSM 9.4 repo
 baseurl=https://dl.shatteredsilicon.net/_INSTALLREPO_/9.4/RPMS/$basearch/
@@ -12,9 +5,9 @@ gpgkey=https://dl.shatteredsilicon.net/_INSTALLREPO_/9.4/RPM-GPG-KEY-SSM-EL$rele
 gpgcheck=1
 enabled=0
 
-[ssm-snmp-exporter]
-name=SSM snmp_exporter repo
-baseurl=https://dl.shatteredsilicon.net/ssm-dev/0.25/RPMS/$basearch/
-gpgkey=https://dl.shatteredsilicon.net/ssm-dev/$releasever/RPM-GPG-KEY-SSM-EL$releasever
+[ssm-tools]
+name=SSM tools repo
+baseurl=https://dl.shatteredsilicon.net/_TOOLSREPO_/RPMS/$basearch/
+gpgkey=https://dl.shatteredsilicon.net/_TOOLSREPO_/RPM-GPG-KEY-SS-TOOLS
 gpgcheck=1
 enabled=0
