@@ -16,12 +16,6 @@
         dest: /etc/nginx/nginx.conf
         line: 'daemon off;'
 
-    - name: NGINX                      | Disable password-page
-      replace:
-        dest: /etc/nginx/conf.d/ssm.conf
-        regexp: 'setup_type ovf-ami'
-        replace: 'setup_type docker'
-
     - name: SSM                        | Fix nginx config
       replace:
         dest: /etc/nginx/nginx.conf
