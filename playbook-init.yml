@@ -40,6 +40,13 @@
         option: enable_gzip
         value: true
 
+    - name: Grafana                    | Disable Live Websocket
+      community.general.ini_file:
+        path: /etc/grafana/grafana.ini
+        section: live
+        option: max_connections
+        value: 0
+
     - name: MariaDB                    | Create /var/lib/mysql-files
       ansible.builtin.file:
         path: /var/lib/mysql-files
